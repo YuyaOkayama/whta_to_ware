@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+ <script>
+    // クジラAPIにアクセス
+    const api = 'https://api.aoikujira.com/tenki/week.php?fmt=json&city=319'
+    fetch(api)
+        .then(res => res.json())
+        .then(data => tenki(data))
+
+    function tenki(data) {
+        
+        let s = ''
+        const tokyo = data[319] // 319 : 東京
+
+        s += `
+          <h1>何を着れば良いのか in 東京</h1>
+        `
+
+        for (let row of tokyo) {
+            if (row['maxtemp'] >= 26) {
+                waht_to_ware = "半袖シャツ　サンダル　ハット　日傘"
+                waht_to_care = "日焼け止めや、お茶などの水分も持ち歩きましょう。"
+            }else if (row['maxtemp'] >= 21){
+                waht_to_ware = "半袖の上に薄手の上着や羽織モノ。"
+                waht_to_care = "半袖と長袖の分水嶺。半袖の上に羽織れる薄手の上着を持っていくとベター。電車とかはエアコンが効いているかも。"
+            }else if (row['maxtemp'] >= 16){
+                waht_to_ware = "薄手のジャケット カーディガン ストールや帽子"
+                waht_to_care = "やや肌寒いくらいの気温。ジャケットやカーディガンを重ね着。"
+            }else if (row['maxtemp'] >= 12){
+                waht_to_waret = "ニット セーター ダウンベスト"
+                waht_to_care = "本格的なコートを着るほどではない。"
+            }else if (row['maxtemp'] >= 7){
+                waht_to_waret = "冬服の上にアウター 厚手のタイツやソックス ブーツ"
+                waht_to_care = "風が吹いているとかなり寒い。"
+            }else{
+                waht_to_ware = "冬素材をしっかり重ね着 ダウンコート あったかインナーやカイロ マフラー 手袋 ニット帽"
+                waht_to_care = "できうるかぎり暖かく。"
+            }
+            s += `
+            <h3>${row['date']}</h3>
+            <ul>
+            <li>東京の天気は${row['forecast']}</li>
+            <li>最高気温: ${row['maxtemp']}℃</li>
+            <li>最低気温: ${row['mintemp']}℃</li>
+            <li>着るもの: ${waht_to_ware}</li>
+            <li>ポイント: ${waht_to_care}</li>
+            </ul>
+            `
+        }
+        document.write(s)
+
+    // console.log(tokyo);
+  }
+  </script>
+</html>
